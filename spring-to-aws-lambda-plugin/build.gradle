@@ -49,3 +49,21 @@ gradlePlugin {
         }
     }
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/arakoodev/venil-serverless-spring")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
