@@ -1,0 +1,41 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.5-SNAPSHOT'
+	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+	id 'java'
+	id 'com.awslambdaconvert' version '1.0-SNAPSHOT'
+}
+
+group = 'com.springdemo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+	mavenLocal()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.amazonaws:aws-java-sdk:1.11.172'
+	implementation 'com.awslambdaconvert:spring-to-aws-lambda-plugin:1.0-SNAPSHOT'
+	implementation 'com.amazonaws:aws-java-sdk:1.11.172'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+task buildZip(type: Zip) {
+	from compileJava
+	from processResources
+	into('lib') {
+		from configurations.runtimeClasspath
+	}
+}
+
+deployConfigs {
+	springAppClass = 'com.springdemo.Application'
+}

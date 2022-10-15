@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'org.springframework.boot' version '2.7.5-SNAPSHOT'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+}
+
+group 'com.awslambdaconvert'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+    compileClasspath 'org.springframework.boot:spring-boot-starter-web'
+
+    // aws lambda handler
+    implementation 'com.amazonaws:aws-lambda-java-core:1.1.0'
+    implementation 'com.amazonaws:aws-java-sdk:1.11.172'
+
+    // aws s3 deployment
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.315'
+
+    // aws lambda deployment
+    implementation 'software.amazon.awssdk:lambda:2.17.285'
+
+    // aws iam deployment
+    implementation 'software.amazon.awssdk:iam:2.17.285'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+gradlePlugin {
+    plugins {
+        springToAwsLambda {
+            id = 'com.awslambdaconvert'
+            implementationClass = 'com.awslambdaconvert.plugin.PluginHandler'
+        }
+    }
+}
